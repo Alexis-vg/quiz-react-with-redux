@@ -24,7 +24,7 @@ const fetchAnswersFailure = (error) => {
     payload: error,
   };
 };
-const redirectToHome = (path) => {
+export const redirectToHome = (path) => {
   return {
     type: redirectHome,
     payload: path,
@@ -36,9 +36,7 @@ const fetchAnswers = (index) => {
     axios.get(url).then((response) => {
       const answers = response.data;
       dispatch(fetchAnswersSuccess(answers));
-      if (index > answers.length - 1) {
-        dispatch(redirectToHome("/check-answers"));
-      }
+
       dispatch(findQuestion(index));
       dispatch(findCorrectAnswer(index));
       dispatch(groupAnswers(index));

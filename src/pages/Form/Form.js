@@ -51,10 +51,11 @@ const Form = (props) => {
     return () => clearInterval(interval);
   }, [numberOfAnswer, setDisabled]);
   useEffect(() => {
-    fetchAnswers(indexOfAnswer);
-    /* if (indexOfAnswer > answers.length - 1) {
+    if (answers.length === 0 || indexOfAnswer < answers.length - 1) {
+      fetchAnswers(indexOfAnswer);
+    } else {
       history.push("/check-answers");
-    } */
+    }
   }, [indexOfAnswer, fetchAnswers, history, answers.length]);
   const handleChange = (e) => {
     setValue(e.target.value);
