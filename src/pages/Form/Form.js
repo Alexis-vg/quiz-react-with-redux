@@ -54,7 +54,7 @@ const Form = (props) => {
   useEffect(() => {
     const interval = setInterval(() => {
       setDisabled(false);
-    }, 2000);
+    }, 1000);
     return () => clearInterval(interval);
   }, [numberOfAnswer, setDisabled]);
   const handleChange = (e) => {
