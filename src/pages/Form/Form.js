@@ -13,6 +13,7 @@ import incrementNumberOfAnswer from "../../redux/actions/incrementNumberOfAnswer
 import {
   Button,
   Card,
+  CircularProgress,
   Container,
   CssBaseline,
   FormControl,
@@ -30,15 +31,12 @@ const Form = (props) => {
   const {
     fetchAnswers,
     answers,
-    loading,
-    error,
-    findCorrectAnswer,
     groupAllAnswers,
-    findQuestion,
     question,
     addEachAnswer,
     numberOfAnswer,
     incrementNumberOfAnswer,
+    loading,
   } = props;
   const [indexOfAnswer, setIndexOfAnswer] = useState(0);
   const [value, setValue] = useState("");
@@ -47,33 +45,26 @@ const Form = (props) => {
   const history = useHistory();
   const classes = useStyles();
   useEffect(() => {
-    const interval = setInterval(() => {
-      setDisabled(false);
-    }, 2000);
-    return () => clearInterval(interval);
-  }, [numberOfAnswer, setDisabled]);
-  useEffect(() => {
     if (answers.length === 0 || indexOfAnswer < answers.length) {
       fetchAnswers(indexOfAnswer);
     } else {
       history.push("/check-answers");
     }
   }, [indexOfAnswer, fetchAnswers, history, answers.length]);
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setDisabled(false);
+    }, 2000);
+    return () => clearInterval(interval);
+  }, [numberOfAnswer, setDisabled]);
   const handleChange = (e) => {
     setValue(e.target.value);
   };
   const handleSubmit = (e) => {
     e.preventDefault();
+    setDisabled(true);
     if (!value) {
-      toast.dark("⚠️ Please select an answer", {
-        position: "top-center",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
+      toast.dark("⚠️ Please select an answer");
     } else {
       addEachAnswer(value);
       setIndexOfAnswer(indexOfAnswer + 1);
@@ -83,6 +74,16 @@ const Form = (props) => {
       }
     }
   };
+  if (loading) {
+    return (
+      <div className={classes.spinnerContainer}>
+        <Typography variant="body2" paragraph>
+          Please, give me a moment to fetch the API
+        </Typography>
+        <CircularProgress />
+      </div>
+    );
+  }
   return (
     <div className={classes.quizContainer}>
       <CssBaseline />
@@ -123,7 +124,7 @@ const Form = (props) => {
                   type="submit"
                   variant="contained"
                   color="primary"
-                  /* disabled={disabled} */
+                  disabled={disabled}
                 >
                   Next
                 </Button>

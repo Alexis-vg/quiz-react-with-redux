@@ -18,14 +18,14 @@ const CheckAnswers = (props) => {
   console.log(props);
   const classes = useStyles();
   const history = useHistory();
+  const correctAnswers = allUserAnswers.filter(
+    (item) => item.calification === "correct"
+  );
   useEffect(() => {
     if (!allUserAnswers.length && !answers.length) {
       history.push("/");
     }
   }, [allUserAnswers.length, answers.length, history]);
-  const correctAnswers = allUserAnswers.filter(
-    (item) => item.calification === "correct"
-  );
   const qualify = () => {
     window.scrollTo(0, 0);
     if (!answers.length || !allUserAnswers.length) {

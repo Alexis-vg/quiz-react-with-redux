@@ -37,6 +37,13 @@ const useStyles = makeStyles({
     right: "calc(50% - 70px)",
     transition: "all 0.3s linear",
   },
+  spinnerContainer: {
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+    height: "100vh",
+  },
 });
 
 export default useStyles;
