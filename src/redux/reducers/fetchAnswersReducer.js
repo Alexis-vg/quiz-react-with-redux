@@ -7,6 +7,7 @@ import { type as findCorrectAnswerType } from "../actions/findCorrectAnswer";
 import { type as findQuestionType } from "../actions/findQuestion";
 import { type as groupAnswersType } from "../actions/groupAnswers";
 import { type as addEachAnswerType } from "../actions/addEachAnswer";
+import { type as qualifyAnswersType } from "../actions/qualifyAnswers";
 const defaultState = {
   loading: true,
   error: "",
@@ -15,6 +16,7 @@ const defaultState = {
   correctAnswer: "",
   groupAllAnswers: [],
   allUserAnswers: [],
+  califications: [],
 };
 function fetchAnswers(state = defaultState, { type, payload }) {
   switch (type) {
@@ -45,7 +47,29 @@ function fetchAnswers(state = defaultState, { type, payload }) {
         calification: "",
       };
       return { ...state, allUserAnswers: [...state.allUserAnswers, newItem] };
-
+    case qualifyAnswersType:
+      const tempQualify = [];
+      for (let i = 0; i < state.answers.length; i++) {
+        if (
+          state.answers[i].correct_answer.answer !==
+          state.allUserAnswers[i].answer
+        ) {
+          tempQualify.push("incorrect");
+        } else {
+          tempQualify.push("correct");
+        }
+      }
+      const tempAllUserAnswers = state.allUserAnswers.map((ans, ansIndex) => {
+        return {
+          ...ans,
+          calification: tempQualify[ansIndex],
+        };
+      });
+      return {
+        ...state,
+        califications: tempQualify,
+        allUserAnswers: tempAllUserAnswers,
+      };
     default:
       return state;
   }

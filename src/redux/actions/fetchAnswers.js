@@ -33,18 +33,20 @@ export const redirectToHome = (path) => {
 const fetchAnswers = (index) => {
   return (dispatch) => {
     dispatch(fetchAnswersRequest());
-    axios.get(url).then((response) => {
-      const answers = response.data;
-      dispatch(fetchAnswersSuccess(answers));
+    axios
+      .get(url)
+      .then((response) => {
+        const answers = response.data;
+        dispatch(fetchAnswersSuccess(answers));
 
-      dispatch(findQuestion(index));
-      dispatch(findCorrectAnswer(index));
-      dispatch(groupAnswers(index));
-    });
-    /* .catch((error) => {
+        dispatch(findQuestion(index));
+        dispatch(findCorrectAnswer(index));
+        dispatch(groupAnswers(index));
+      })
+      .catch((error) => {
         const errorMsg = error.message;
         dispatch(fetchAnswersFailure(errorMsg));
-      }); */
+      });
   };
 };
 

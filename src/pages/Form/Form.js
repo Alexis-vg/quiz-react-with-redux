@@ -8,6 +8,7 @@ import findCorrectAnswer from "../../redux/actions/findCorrectAnswer";
 import findQuestion from "../../redux/actions/findQuestion";
 import groupAnswers from "../../redux/actions/groupAnswers";
 import addEachAnswer from "../../redux/actions/addEachAnswer";
+import incrementNumberOfAnswer from "../../redux/actions/incrementNumberOfAnswer";
 //material ui
 import {
   Button,
@@ -36,9 +37,10 @@ const Form = (props) => {
     findQuestion,
     question,
     addEachAnswer,
+    numberOfAnswer,
+    incrementNumberOfAnswer,
   } = props;
   const [indexOfAnswer, setIndexOfAnswer] = useState(0);
-  const [numberOfAnswer, setNumberOfAnswer] = useState(1);
   const [value, setValue] = useState("");
   const [disabled, setDisabled] = useState(true);
   console.log(props);
@@ -51,7 +53,7 @@ const Form = (props) => {
     return () => clearInterval(interval);
   }, [numberOfAnswer, setDisabled]);
   useEffect(() => {
-    if (answers.length === 0 || indexOfAnswer < answers.length - 1) {
+    if (answers.length === 0 || indexOfAnswer < answers.length) {
       fetchAnswers(indexOfAnswer);
     } else {
       history.push("/check-answers");
@@ -77,7 +79,7 @@ const Form = (props) => {
       setIndexOfAnswer(indexOfAnswer + 1);
       setValue("");
       if (numberOfAnswer < answers.length) {
-        setNumberOfAnswer(numberOfAnswer + 1);
+        incrementNumberOfAnswer();
       }
     }
   };
@@ -87,7 +89,7 @@ const Form = (props) => {
       <Container className={classes.formContainer} maxWidth="md">
         <Card>
           <Typography className={classes.counter} variant="h4">
-            {/* {numberOfAnswer}/{apiResponse.length} */}
+            {numberOfAnswer}/{answers.length}
           </Typography>
           <form onSubmit={handleSubmit}>
             <FormControl fullWidth align="center" component="fieldset">
@@ -157,6 +159,7 @@ const Form = (props) => {
 const mapStateToProps = (state) => {
   const { answers, loading, error, correctAnswer, groupAllAnswers, question } =
     state.fetchAnswersReducer;
+  const { numberOfAnswer } = state.numberOfAnswerReducer;
   return {
     answers,
     loading,
@@ -164,6 +167,7 @@ const mapStateToProps = (state) => {
     correctAnswer,
     groupAllAnswers,
     question,
+    numberOfAnswer,
   };
 };
 const mapDispatchToProps = {
@@ -172,5 +176,6 @@ const mapDispatchToProps = {
   findQuestion,
   groupAnswers,
   addEachAnswer,
+  incrementNumberOfAnswer,
 };
 export default connect(mapStateToProps, mapDispatchToProps)(Form);
